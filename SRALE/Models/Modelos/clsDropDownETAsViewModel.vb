@@ -1,8 +1,8 @@
 ﻿Namespace SRALE.Models.Modelos
     <Serializable>
-    Public Class clsDropDownCPRViewModel
+    Public Class clsDropDownETAsViewModel
         Private Property _guid As Guid
-        Private Property _lista As List(Of clsCPR)
+        Private Property _lista As List(Of clsETAs)
         Public Property IdGuid As Guid
             Get
                 Return _guid
@@ -11,11 +11,11 @@
                 _guid = value
             End Set
         End Property
-        Public Property Lista As List(Of clsCPR)
+        Public Property Lista As List(Of clsETAs)
             Get
                 Return _lista
             End Get
-            Set(value As List(Of clsCPR))
+            Set(value As List(Of clsETAs))
                 _lista = value
             End Set
         End Property

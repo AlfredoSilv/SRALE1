@@ -3,8 +3,6 @@ Imports System.Data.Entity
 Imports System.Data.Entity.ModelConfiguration.Conventions
 Imports OSIsoft.AF
 Imports OSIsoft.AF.Asset
-
-
 Namespace EF
     'Cria uma classe herdada de DBContext
     Public Class clsContext
@@ -38,18 +36,9 @@ End Namespace
 'Cria a classe CPR
 Public Class clsCPR
     'Cria as propriendade privadas de CPR
-    Private Property _ID As Integer
     Private Property _ElementID As Guid
     Private Property _Nome As String
     'Cria as propriedades públicas de CPR
-    Public Property ID As Integer
-        Get
-            Return _ID
-        End Get
-        Set(value As Integer)
-            _ID = value
-        End Set
-    End Property
     Public Property Nome As String
         Get
             Return _Nome
@@ -69,49 +58,86 @@ Public Class clsCPR
     Public Sub New()
 
     End Sub
-    Public Sub New(ByVal ID As Integer, ByVal Nome As String, ByVal ElementID As Guid)
-        Me.ID = ID
+    Public Sub New(ByVal Nome As String, ByVal ElementID As Guid)
         Me.Nome = Nome
         Me.ElementID = ElementID
     End Sub
-    'Cria uma função para armazenar uma coleção de CPR
-    Public Function ListaCPR(ByVal IDRoot As Guid) As List(Of clsCPR)
-        Dim myPathRootID As Guid = IDRoot
+    Public Shared Function buscaAF() As List(Of clsCPR)
         Dim myPISystems As New PISystems
         Dim myCom As PISystem = myPISystems.DefaultPISystem
         Dim myDB As AFDatabase = myCom.Databases("Compesa")
-        ' Dim myElements As AFNamedCollectionList(Of AFElement)
-        Dim listelements As AFElements
-        Dim CPRs As clsCPR
-        Dim cont As Integer = 0
-        Dim listCpr As New List(Of clsCPR)
-
-        'Procura os elementos filhos com base no ID do Path Root (myPathRootID).
-        listelements = AFElement.FindElement(myCom, myPathRootID).Elements
-        For Each cpr As AFElement In listelements
-            CPRs = New clsCPR(cont, cpr.Name, cpr.ID)
-            listCpr.Add(CPRs)
-            cont += 1
+        Dim listaCPR As AFElements
+        '6aef0129-c77d-4828-98cc-3f80e059183e > ElementID do \PORTAL COOPERAÇÃO\RELATÓRIO DE QUALIDADE DA ÁGUA\
+        Dim myPathRootID As Guid = New Guid("6aef0129-c77d-4828-98cc-3f80e059183e")
+        listaCPR = AFElement.FindElement(myCom, myPathRootID).Elements
+        Dim CPR As New clsCPR()
+        Dim retorno As New List(Of clsCPR)
+        For Each item As AFElement In listaCPR
+            CPR.ElementID = item.ID
+            CPR.Nome = item.Name
+            retorno.Add(CPR)
         Next
-        Return listCpr
+        Return retorno
+    End Function
+    Public Shared Function buscarCPRSQL() As List(Of clsCPR)
+        Dim conn As SqlConnection = Nothing
+        Dim commad As SqlCommand = Nothing
+        Dim dataReader As SqlDataReader = Nothing
+        Try
+            conn = New SqlConnection(SRALE.DAO.clsUtilDAO.connectionString)
+            conn.Open()
+            Dim sql As [String] = "SELECT cpr_ElementID, cpr_Nome FROM SRALE.dbo.tb_Coordenacao"
+            commad = New SqlCommand(sql, conn)
+            dataReader = commad.ExecuteReader()
+            Dim retorno As New List(Of clsCPR)
+            While dataReader.Read()
+                Dim CPR As New clsCPR()
+                CPR.ElementID = Guid.Parse(dataReader("cpr_ElementID").ToString)
+                CPR.Nome = dataReader("cpr_Nome").ToString
+                retorno.Add(CPR)
+            End While
+            Return retorno
+        Finally
+            If dataReader IsNot Nothing Then
+                dataReader.Close()
+            End If
+
+            If conn IsNot Nothing Then
+                conn.Close()
+            End If
+        End Try
+
+    End Function
+    Public Function criarCPRViewModel(ByVal listaCPR As List(Of clsCPR)) As SRALE.Models.Modelos.clsCPRViewModel
+        Dim CPRViewModel As New SRALE.Models.Modelos.clsCPRViewModel()
+        If listaCPR Is Nothing Then
+            Return CPRViewModel
+        End If
+
+        Dim retorno As New StringBuilder()
+        Dim listaCPRCadastrada As List(Of clsCPR) = buscaAF()
+
+        Dim listGuiID As New List(Of Guid)
+
+        For Each CPRCadastrada As clsCPR In listaCPRCadastrada
+            If listaCPR.IndexOf(CPRCadastrada) >= 0 Then
+                listGuiID.Add(CPRCadastrada.ElementID)
+            End If
+        Next
+
+        CPRViewModel.CPRDisponivel = listaCPR
+        CPRViewModel.CPRSelecionada = listGuiID
+
+        Return CPRViewModel
     End Function
 
 End Class
 'Cria as propriedades privadas de ETAs
 Public Class clsETAs
-    Private Property _ID As Integer
     Private Property _ElementID As Guid
     Private Property _ParentID As Guid
     Private Property _Nome As String
     'Cria as propriedades públicas de ETAs
-    Public Property ID As Integer
-        Get
-            Return _ID
-        End Get
-        Set(value As Integer)
-            _ID = value
-        End Set
-    End Property
     Public Property ElementID As Guid
         Get
             Return _ElementID
@@ -139,19 +165,17 @@ Public Class clsETAs
     Public Sub New()
 
     End Sub
-    Public Sub New(ByVal ID As Integer, ByVal ElemnentId As Guid, ByVal ParentID As Guid, ByVal Nome As String)
-        Me.ID = ID
+    Public Sub New(ByVal ElemnentId As Guid, ByVal ParentID As Guid, ByVal Nome As String)
         Me.ElementID = ElementID
         Me.ParentID = ParentID
         Me.Nome = Nome
     End Sub
     'Cria uma função para armazenar uma coleção de ETas
-    Public Function ListaETA(ByVal IDRoot As Guid) As List(Of clsETAs)
+    Public Function buscaETAAF(ByVal IDRoot As Guid) As List(Of clsETAs)
         Dim myPathRootID As Guid = IDRoot
         Dim myPISystems As New PISystems
         Dim myCom As PISystem = myPISystems.DefaultPISystem
         Dim myDB As AFDatabase = myCom.Databases("Compesa")
-        ' Dim myElements As AFNamedCollectionList(Of AFElement)
         Dim listelements As AFElements
         Dim ETAs As clsETAs
         Dim cont As Integer = 0
@@ -160,7 +184,7 @@ Public Class clsETAs
         'Procura os elementos filhos com base no ID do Path Root (myPathRootID).
         listelements = AFElement.FindElement(myCom, myPathRootID).Elements
         For Each eta As AFElement In listelements
-            ETAs = New clsETAs(cont, eta.ID, eta.Parent.ID, eta.Name)
+            ETAs = New clsETAs(eta.ID, eta.Parent.ID, eta.Name)
             listEtas.Add(ETAs)
             cont += 1
         Next
