@@ -8,8 +8,8 @@ Namespace SRALE.Controller
         End Function
         <HttpGet>
         Public Function CPRInicio() As PartialViewResult
-            Dim cpr As New clsCPR
-            Dim listaCpr As List(Of clsCPR) = clsCPR.ListaCPR(Guid.Parse(""))
+            Dim cpr As New clsCoord
+            Dim listaCpr As List(Of clsCoord) = clsCoord.ListaCPR(Guid.Parse(""))
             Dim model As clsCPRViewModel = gerenciaBusiness.criarGerenciaViewModel(listaGerencia)
 
             Return PartialView(model)

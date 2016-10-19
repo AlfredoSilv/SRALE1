@@ -190,21 +190,14 @@
     <Compile Include="App_Start\BundleConfig.vb" />
     <Compile Include="App_Start\FilterConfig.vb" />
     <Compile Include="App_Start\RouteConfig.vb" />
-    <Compile Include="Bussines\clsCPRBussines.vb" />
-    <Compile Include="DAO\clsCPRDAOImpl.vb" />
-    <Compile Include="DAO\clsUtilDAO.vb" />
-    <Compile Include="DAO\ICPR.vb" />
+    <Compile Include="DAO\clsConexao.vb" />
     <Compile Include="Global.asax.vb">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\clsContext.vb" />
+    <Compile Include="Models\clsCoord.vb" />
+    <Compile Include="Models\clsETAs.vb" />
     <Compile Include="Models\clsQualidade.vb" />
-    <Compile Include="Models\Modelos\clsCPRViewModel.vb" />
-    <Compile Include="Models\Modelos\clsEstruturCPRViewModel.vb" />
-    <Compile Include="Models\Modelos\clsETAsViewModel.vb" />
-    <Compile Include="Models\Modelos\clsDropDownCPRViewModel.vb" />
-    <Compile Include="Models\Modelos\clsDropDownETAsViewModel.vb" />
-    <Compile Include="Models\Modelos\clsListSelectCPRViewModel.vb" />
-    <Compile Include="Models\Modelos\clsListSelectETAsViewModel.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
