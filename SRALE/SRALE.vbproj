@@ -194,10 +194,9 @@
     <Compile Include="Global.asax.vb">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\clsContext.vb" />
+    <Compile Include="Models\clsAtributos.vb" />
     <Compile Include="Models\clsCoord.vb" />
     <Compile Include="Models\clsETAs.vb" />
-    <Compile Include="Models\clsQualidade.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -214,6 +213,8 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Controllers\HomeController.vb" />
+    <Compile Include="Negocio\clsNegocioImpl.vb" />
+    <Compile Include="Negocio\INegocio.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">

@@ -2,7 +2,9 @@
 Imports OSIsoft.AF
 Imports OSIsoft.AF.Asset
 Namespace SRALE.Models
-    'Cria a classe CPR
+    ''' <summary>
+    ''' Cria a classe CPR
+    ''' </summary>
     Public Class clsCoord
         Implements IComparer(Of clsCoord)
         'Cria as propriendade privadas de CPR
@@ -25,9 +27,17 @@ Namespace SRALE.Models
                 _ElementID = value
             End Set
         End Property
+        ''' <summary>
+        ''' Cria uma metódo new
+        ''' </summary>
         Public Sub New()
 
         End Sub
+        ''' <summary>
+        ''' Cria um método new implementado para carregar a classe
+        ''' </summary>
+        ''' <param name="Nome"></param>
+        ''' <param name="ElementID"></param>
         Public Sub New(ByVal Nome As String, ByVal ElementID As Guid)
             Me.Nome = Nome
             Me.ElementID = ElementID
@@ -45,7 +55,7 @@ Namespace SRALE.Models
         ''' Função que busca as Coordenações no AF
         ''' </summary>
         ''' <returns></returns>
-        Public Shared Function buscaAF() As List(Of clsCoord)
+        Public Function buscaAF() As List(Of clsCoord)
             Dim myPISystems As New PISystems
             Dim myCom As PISystem = myPISystems.DefaultPISystem
             Dim myDB As AFDatabase = myCom.Databases(My.Settings.myAFdb)
@@ -105,8 +115,8 @@ Namespace SRALE.Models
         ''' Método de inserção de Coordenada na base Sql
         ''' </summary>
         ''' <param name="ElementId"></param>
-        ''' <param name="ElemnetName"></param>
-        Public Sub insCoordSql(ByVal ElementId As Guid, ByVal ElemnetName As String)
+        ''' <param name="ElementName"></param>
+        Public Sub insCoordSql(ByVal ElementId As Guid, ByVal ElementName As String)
             Dim conn As SqlConnection = Nothing
             Dim commad As SqlCommand = Nothing
             Try
@@ -118,7 +128,7 @@ Namespace SRALE.Models
                 sql.Append(",[cpr_Nome]) ")
                 sql.Append("VALUES ")
                 sql.Append("('" & ElementId.ToString & "', ")
-                sql.Append("'" & ElemnetName & "'")
+                sql.Append("'" & ElementName & "'")
                 commad = New SqlCommand(sql.ToString, conn)
                 commad.ExecuteNonQuery()
                 conn.Close()
