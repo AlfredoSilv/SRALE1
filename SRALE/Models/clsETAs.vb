@@ -1,6 +1,7 @@
 ﻿Imports System.Data.SqlClient
 Imports OSIsoft.AF
 Imports OSIsoft.AF.Asset
+Imports SRALE.SRALE.DAO
 Namespace SRALE.Models
     ''' <summary>
     ''' Cria as propriedades privadas de ETAs
@@ -89,30 +90,52 @@ Namespace SRALE.Models
             Return listEtas
         End Function
         ''' <summary>
+        ''' Função que busca as ETAs no SQL
+        ''' </summary>
+        ''' <returns></returns>
+        Public Shared Function buscarEtasSQL() As List(Of clsETAs)
+            Dim conexao As New clsConexao(My.Settings.strCon)
+            Dim sql As New StringBuilder
+            sql.Append("SELECT eta_ElementID, eta_ParentID, eta_Nome FROM dbo.tb_ETAs ORDER BY eta_Nome")
+            Dim dataReader As SqlDataReader = conexao.retornaDataReader(sql.ToString)
+            Dim retorno As New List(Of clsETAs)
+            Try
+                If dataReader.HasRows Then
+                    While dataReader.Read()
+                        Dim ETA As New clsETAs()
+                        ETA.ElementID = Guid.Parse(dataReader("eta_ElementID").ToString)
+                        ETA.ParentID = Guid.Parse(dataReader("eta_ParentID").ToString)
+                        ETA.Nome = dataReader("eta_Nome").ToString
+                        retorno.Add(ETA)
+                    End While
+                End If
+                Return retorno
+            Finally
+            End Try
+        End Function
+        ''' <summary>
         ''' Método de inserção de ETAs na base Sql
         ''' </summary>
         ''' <param name="ElementID"></param>
         ''' <param name="ParentID"></param>
         ''' <param name="ElementName"></param>
-        Public Sub insETAs(ByVal ElementID As Guid, ByVal ParentID As Guid, ByVal ElementName As String)
-            Dim conn As SqlConnection = Nothing
-            Dim commad As SqlCommand = Nothing
+        ''' <param name="cmdParam"></param>
+        Public Sub insETAsSql(ByVal ElementID As Guid, ByVal ParentID As Guid, ByVal ElementName As String, ByVal ParamArray cmdParam() As SqlParameter)
+            Dim conexao As New clsConexao(My.Settings.strCon)
+            Dim sql As New StringBuilder
+            cmdParam(0).Value = ElementID.ToString
+            cmdParam(1).Value = ParentID.ToString
+            cmdParam(2).Value = ElementName.ToString
+            sql.Append("INSERT INTO [dbo].[tb_ETAs] ")
+            sql.Append("([eta_ElementID] ")
+            sql.Append(",[eta_ParentID] ")
+            sql.Append(",[eta_Nome]) ")
+            sql.Append("VALUES ")
+            sql.Append("(@ElementID, ")
+            sql.Append("(@ParentID, ")
+            sql.Append("@ElementName")
             Try
-                conn = New SqlConnection(My.Settings.strCon)
-                conn.Open()
-                Dim sql As New StringBuilder
-                sql.Append("INSERT INTO [dbo].[tb_ETAs] ")
-                sql.Append("([eta_ElementID] ")
-                sql.Append(",[eta_ParentID] ")
-                sql.Append(",[eta_Nome]) ")
-                sql.Append("VALUES ")
-                sql.Append("('" & ElementID.ToString & "', ")
-                sql.Append("('" & ParentID.ToString & "', ")
-                sql.Append("'" & ElementName & "'")
-                commad = New SqlCommand(sql.ToString, conn)
-                commad.ExecuteNonQuery()
-                conn.Close() '
-                commad.Dispose()
+                conexao.insertDados(sql.ToString, cmdParam)
             Catch ex As SqlException
             Finally
             End Try

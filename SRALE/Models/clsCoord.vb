@@ -11,7 +11,16 @@ Namespace SRALE.Models
         'Cria as propriendade privadas de CPR
         Private Property _ElementID As Guid
         Private Property _Nome As String
+        Private Property _ListaEta As List(Of clsETAs)
         'Cria as propriedades públicas de CPR
+        Public Property ElementID As Guid
+            Get
+                Return _ElementID
+            End Get
+            Set(value As Guid)
+                _ElementID = value
+            End Set
+        End Property
         Public Property Nome As String
             Get
                 Return _Nome
@@ -20,12 +29,12 @@ Namespace SRALE.Models
                 _Nome = value
             End Set
         End Property
-        Public Property ElementID As Guid
+        Public Property ListaEta As List(Of clsETAs)
             Get
-                Return _ElementID
+                Return _ListaEta
             End Get
-            Set(value As Guid)
-                _ElementID = value
+            Set(value As List(Of clsETAs))
+                _ListaEta = value
             End Set
         End Property
         ''' <summary>
@@ -39,9 +48,10 @@ Namespace SRALE.Models
         ''' </summary>
         ''' <param name="Nome"></param>
         ''' <param name="ElementID"></param>
-        Public Sub New(ByVal Nome As String, ByVal ElementID As Guid)
-            Me.Nome = Nome
+        Public Sub New(ByVal ElementID As Guid, ByVal Nome As String, ByVal ListaEtas As List(Of clsETAs))
             Me.ElementID = ElementID
+            Me.Nome = Nome
+            Me.ListaEta = ListaEta
         End Sub
         ''' <summary>
         ''' Permite a ordenação do objeto
@@ -66,9 +76,9 @@ Namespace SRALE.Models
             listaCPR = AFElement.FindElement(myCom, myPathRootID).Elements
             Dim CPR As New clsCoord()
             Dim retorno As New List(Of clsCoord)
+            Dim ETA As New clsETAs
             For Each item As AFElement In listaCPR
-                CPR.ElementID = item.ID
-                CPR.Nome = item.Name
+                CPR = New clsCoord(item.ID, item.Name, ETA.buscaETAAF(item.ID))
                 retorno.Add(CPR)
             Next
             Return retorno

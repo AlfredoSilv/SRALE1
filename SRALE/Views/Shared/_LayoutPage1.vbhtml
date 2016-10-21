@@ -24,6 +24,13 @@
     </div>
     <div class="container body-content">     
         @RenderBody() 
+        <table>
+            <tr>
+                <td style="width:">
+
+                </td>
+            </tr>
+        </table>
         <hr />
         <footer>
             <p>&copy; @DateTime.Now.Year - Compesa - GPA</p>
