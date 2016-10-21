@@ -1,6 +1,7 @@
 ﻿Imports System.Data.SqlClient
 Imports OSIsoft.AF
 Imports OSIsoft.AF.Asset
+Imports SRALE.SRALE.DAO
 Namespace SRALE.Models
     ''' <summary>
     ''' Cria a classe CPR
@@ -77,17 +78,12 @@ Namespace SRALE.Models
         ''' </summary>
         ''' <returns></returns>
         Public Shared Function buscarCPRSQL() As List(Of clsCoord)
-            Dim conn As SqlConnection = Nothing
-            Dim commad As SqlCommand = Nothing
-            Dim dataReader As SqlDataReader = Nothing
+            Dim conexao As New clsConexao(My.Settings.strCon)
+            Dim sql As New StringBuilder
+            sql.Append("SELECT cpr_ElementID, cpr_Nome FROM SRALE.dbo.tb_Coordenacao ORDER BY cpr_Nome")
+            Dim dataReader As SqlDataReader = conexao.retornaDataReader(sql.ToString)
+            Dim retorno As New List(Of clsCoord)
             Try
-                conn = New SqlConnection(My.Settings.strCon)
-                conn.Open()
-                Dim sql As New StringBuilder
-                sql.Append("SELECT cpr_ElementID, cpr_Nome FROM SRALE.dbo.tb_Coordenacao ORDER BY cpr_Nome")
-                commad = New SqlCommand(sql.ToString, conn)
-                dataReader = commad.ExecuteReader()
-                Dim retorno As New List(Of clsCoord)
                 If dataReader.HasRows Then
                     While dataReader.Read()
                         Dim CPR As New clsCoord()
@@ -99,16 +95,6 @@ Namespace SRALE.Models
 
                 Return retorno
             Finally
-                If dataReader IsNot Nothing Then
-                    dataReader.Close()
-                    conn.Close()
-                    commad.Dispose()
-                End If
-
-                If conn IsNot Nothing Then
-                    conn.Close()
-                    commad.Dispose()
-                End If
             End Try
         End Function
         ''' <summary>
@@ -116,27 +102,22 @@ Namespace SRALE.Models
         ''' </summary>
         ''' <param name="ElementId"></param>
         ''' <param name="ElementName"></param>
-        Public Sub insCoordSql(ByVal ElementId As Guid, ByVal ElementName As String)
-            Dim conn As SqlConnection = Nothing
-            Dim commad As SqlCommand = Nothing
+        ''' <param name="cmdParam"></param>
+        Public Sub insCoordSql(ByVal ElementId As Guid, ByVal ElementName As String, ByVal ParamArray cmdParam() As SqlParameter)
+            Dim conexao As New clsConexao(My.Settings.strCon)
+            Dim sql As New StringBuilder
+            cmdParam(0).Value = ElementId.ToString
+            cmdParam(1).Value = ElementName.ToString
+            sql.Append("INSERT INTO [dbo].[tb_Coordenacao] ")
+            sql.Append("([cpr_ElementID] ")
+            sql.Append(",[cpr_Nome]) ")
+            sql.Append("VALUES ")
+            sql.Append("(@cpr_ElementID, @ElementName)")
             Try
-                conn = New SqlConnection(My.Settings.strCon)
-                conn.Open()
-                Dim sql As New StringBuilder
-                sql.Append("INSERT INTO [dbo].[tb_Coordenacao] ")
-                sql.Append("([cpr_ElementID] ")
-                sql.Append(",[cpr_Nome]) ")
-                sql.Append("VALUES ")
-                sql.Append("('" & ElementId.ToString & "', ")
-                sql.Append("'" & ElementName & "'")
-                commad = New SqlCommand(sql.ToString, conn)
-                commad.ExecuteNonQuery()
-                conn.Close()
-                commad.Dispose()
+                conexao.insertDados(sql.ToString, cmdParam)
             Catch ex As SqlException
             Finally
             End Try
         End Sub
     End Class
-
 End Namespace

@@ -46,14 +46,14 @@ Namespace SRALE.DAO
             Dim cn As SqlConnection = AbreConexao()
             Dim dr As SqlDataReader
 
-            'Cria um objeto command a  partir da stored procedure
+            'Cria um objeto command a  partir da stored procedure.
             Dim cmd As New SqlCommand(strSP, cn)
             cmd.CommandTimeout = 60
             cmd.CommandType = CommandType.StoredProcedure
 
             Dim par As SqlParameter
 
-            'Percorre a coleção de parametros
+            'Percorre a coleção de parametros.
             For Each par In cmdParametros
                 par = cmd.Parameters.Add(par)
                 par.Direction = ParameterDirection.Input
@@ -81,10 +81,36 @@ Namespace SRALE.DAO
 
             'Executa o comando.
             dr = cmd.ExecuteReader(CommandBehavior.CloseConnection)
+            'Destroi o objeto command.
             cmd.Dispose()
 
             'Retorna o datareader.
             Return dr
         End Function
+        ''' <summary>
+        ''' Método para insersão de dados no banco
+        ''' </summary>
+        ''' <param name="strSP"></param>
+        Public Overloads Sub insertDados(ByVal strSP As String, ByVal ParamArray cmdParametros() As SqlParameter)
+            'Obtem a conexão
+            Dim cn As SqlConnection = AbreConexao()
+
+            'Cria o objeto command a partir da Store procedure.
+            Dim cmd As New SqlCommand(strSP, cn)
+            cmd.CommandTimeout = 60
+            cmd.CommandType = CommandType.Text
+
+            'Percorre a coleção de parametros.
+            For Each par In cmdParametros
+                par = cmd.Parameters.Add(par)
+                par.Direction = ParameterDirection.Input
+            Next
+            'Executa o comando
+            cmd.ExecuteNonQuery()
+            'Destroi o objeto command.
+            cmd.Dispose()
+            'Fecha a conexão.
+            cn.Close()
+        End Sub
     End Class
 End Namespace
