@@ -5,14 +5,14 @@ Namespace SRALE.Negocio
         Implements INegocio
         Private Function buscaCoord() As List(Of clsCoord) Implements INegocio.buscaCoordAF
             Dim lstCoord As List(Of clsCoord)
-            Dim Coord As New clsCoord
-            lstCoord = Coord.buscaAF()
+            Dim elementos As New clsElementos
+            lstCoord = elementos.CoordAF
             Return lstCoord
         End Function
         Private Function buscaEtas(ByVal ID As Guid) As List(Of clsETAs) Implements INegocio.buscaEtasAF
             Dim lstEtas As List(Of clsETAs)
-            Dim ETA As New clsETAs
-            lstEtas = ETA.buscaETAAF(ID)
+            Dim elementos As New clsElementos
+            lstEtas = elementos.EtasAF
             Return lstEtas
         End Function
         Private Function buscaAtrib(ByVal ID As Guid, ByVal dtIni As String, ByVal dtFin As String) As List(Of clsAtributos) Implements INegocio.buscaAtribAF

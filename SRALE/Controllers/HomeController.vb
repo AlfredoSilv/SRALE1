@@ -8,8 +8,8 @@ Namespace SRALE.Controller
         End Function
         <HttpGet>
         Public Function CPRInicio() As PartialViewResult
-            Dim coord As New clsCoord
-            Dim lstCoord As List(Of clsCoord) = clsCoord.buscarCPRSQL()
+            Dim coord As New clsElementos
+            Dim lstCoord As List(Of clsCoord) = coord.CoordAF
             Dim model As New clsCoordDdlViewModel
             model.ListCoord = lstCoord
             Return PartialView(model)

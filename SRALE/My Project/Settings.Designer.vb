@@ -66,7 +66,7 @@ Namespace My
         
         <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("6aef0129-c77d-4828-98cc-3f80e059183e")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("d4763b58-3566-4443-849f-e8cb49ff8096")>  _
         Public ReadOnly Property myAFRootID() As Global.System.Guid
             Get
                 Return CType(Me("myAFRootID"),Global.System.Guid)
@@ -75,10 +75,46 @@ Namespace My
         
         <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("""Compesa""")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("""COMPESA NOVO""")>  _
         Public ReadOnly Property myAFdb() As String
             Get
                 Return CType(Me("myAFdb"),String)
+            End Get
+        End Property
+        
+        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("cf0e452d-636b-4194-9d32-31ebb3b45a58")>  _
+        Public ReadOnly Property myAFEtaTempID() As Global.System.Guid
+            Get
+                Return CType(Me("myAFEtaTempID"),Global.System.Guid)
+            End Get
+        End Property
+        
+        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("7d88482d-5ab5-498a-9e88-53321fd4a2fe")>  _
+        Public ReadOnly Property myAFCategoriaID() As Global.System.Guid
+            Get
+                Return CType(Me("myAFCategoriaID"),Global.System.Guid)
+            End Get
+        End Property
+        
+        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("37f1ea6a-84d0-11e6-a49e-346895df285c")>  _
+        Public ReadOnly Property myAFGerRootID() As Global.System.Guid
+            Get
+                Return CType(Me("myAFGerRootID"),Global.System.Guid)
+            End Get
+        End Property
+        
+        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("005322b9-a0e2-471e-a955-83bd9e3a0205")>  _
+        Public ReadOnly Property myAFCoordTempID() As Global.System.Guid
+            Get
+                Return CType(Me("myAFCoordTempID"),Global.System.Guid)
             End Get
         End Property
     End Class

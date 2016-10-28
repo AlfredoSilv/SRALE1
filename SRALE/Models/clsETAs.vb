@@ -4,12 +4,12 @@ Imports OSIsoft.AF.Asset
 Imports SRALE.SRALE.DAO
 Namespace SRALE.Models
     ''' <summary>
-    ''' Cria as propriedades privadas de ETAs
+    ''' Cria as propriedades privadas de ETAs.
     ''' </summary>
+    <Serializable>
     Public Class clsETAs
         Implements IComparer(Of clsETAs)
         Private Property _ElementID As Guid
-        Private Property _ParentID As Guid
         Private Property _Nome As String
         ''' <summary>
         ''' Cria as propriedades públicas de ETAs
@@ -21,14 +21,6 @@ Namespace SRALE.Models
             End Get
             Set(value As Guid)
                 _ElementID = value
-            End Set
-        End Property
-        Public Property ParentID As Guid
-            Get
-                Return _ParentID
-            End Get
-            Set(value As Guid)
-                _ParentID = value
             End Set
         End Property
         Public Property Nome As String
@@ -49,11 +41,9 @@ Namespace SRALE.Models
         ''' Cria uma método new implementado para carregar a classe
         ''' </summary>
         ''' <param name="ElemnentId"></param>
-        ''' <param name="ParentID"></param>
         ''' <param name="Nome"></param>
-        Public Sub New(ByVal ElemnentId As Guid, ByVal ParentID As Guid, ByVal Nome As String)
+        Public Sub New(ByVal ElemnentId As Guid, ByVal Nome As String)
             Me.ElementID = ElementID
-            Me.ParentID = ParentID
             Me.Nome = Nome
         End Sub
         ''' <summary>
@@ -65,30 +55,7 @@ Namespace SRALE.Models
         Public Function Compare(ByVal x As clsETAs, ByVal y As clsETAs) As Integer Implements IComparer(Of clsETAs).Compare
             Return String.Compare(x.Nome, y.Nome)
         End Function
-        ''' <summary>
-        ''' Cria uma função para armazenar uma coleção de ETas
-        ''' </summary>
-        ''' <param name="IDRoot"></param>
-        ''' <returns></returns>
-        Public Function buscaETAAF(ByVal IDRoot As Guid) As List(Of clsETAs)
-            Dim myPathRootID As Guid = IDRoot
-            Dim myPISystems As New PISystems
-            Dim myCom As PISystem = myPISystems.DefaultPISystem
-            Dim myDB As AFDatabase = myCom.Databases(My.Settings.myAFdb)
-            Dim listelements As AFElements
-            Dim ETAs As clsETAs
-            Dim cont As Integer = 0
-            Dim listEtas As New List(Of clsETAs)
 
-            'Procura os elementos filhos com base no ID do Path Root (myPathRootID).
-            listelements = AFElement.FindElement(myCom, myPathRootID).Elements
-            For Each eta As AFElement In listelements
-                ETAs = New clsETAs(eta.ID, eta.Parent.ID, eta.Name)
-                listEtas.Add(ETAs)
-                cont += 1
-            Next
-            Return listEtas
-        End Function
         ''' <summary>
         ''' Função que busca as ETAs no SQL
         ''' </summary>
@@ -96,7 +63,7 @@ Namespace SRALE.Models
         Public Shared Function buscarEtasSQL() As List(Of clsETAs)
             Dim conexao As New clsConexao(My.Settings.strCon)
             Dim sql As New StringBuilder
-            sql.Append("SELECT eta_ElementID, eta_ParentID, eta_Nome FROM dbo.tb_ETAs ORDER BY eta_Nome")
+            sql.Append("SELECT eta_ElementID, eta_Nome FROM dbo.tb_ETAs ORDER BY eta_Nome")
             Dim dataReader As SqlDataReader = conexao.retornaDataReader(sql.ToString)
             Dim retorno As New List(Of clsETAs)
             Try
@@ -104,7 +71,6 @@ Namespace SRALE.Models
                     While dataReader.Read()
                         Dim ETA As New clsETAs()
                         ETA.ElementID = Guid.Parse(dataReader("eta_ElementID").ToString)
-                        ETA.ParentID = Guid.Parse(dataReader("eta_ParentID").ToString)
                         ETA.Nome = dataReader("eta_Nome").ToString
                         retorno.Add(ETA)
                     End While
@@ -117,22 +83,18 @@ Namespace SRALE.Models
         ''' Método de inserção de ETAs na base Sql
         ''' </summary>
         ''' <param name="ElementID"></param>
-        ''' <param name="ParentID"></param>
         ''' <param name="ElementName"></param>
         ''' <param name="cmdParam"></param>
-        Public Sub insETAsSql(ByVal ElementID As Guid, ByVal ParentID As Guid, ByVal ElementName As String, ByVal ParamArray cmdParam() As SqlParameter)
+        Public Sub insETAsSql(ByVal ElementID As Guid, ByVal ElementName As String, ByVal ParamArray cmdParam() As SqlParameter)
             Dim conexao As New clsConexao(My.Settings.strCon)
             Dim sql As New StringBuilder
             cmdParam(0).Value = ElementID.ToString
-            cmdParam(1).Value = ParentID.ToString
-            cmdParam(2).Value = ElementName.ToString
+            cmdParam(1).Value = ElementName.ToString
             sql.Append("INSERT INTO [dbo].[tb_ETAs] ")
             sql.Append("([eta_ElementID] ")
-            sql.Append(",[eta_ParentID] ")
             sql.Append(",[eta_Nome]) ")
             sql.Append("VALUES ")
             sql.Append("(@ElementID, ")
-            sql.Append("(@ParentID, ")
             sql.Append("@ElementName")
             Try
                 conexao.insertDados(sql.ToString, cmdParam)

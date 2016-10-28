@@ -4,15 +4,14 @@ Imports OSIsoft.AF.Asset
 Imports SRALE.SRALE.DAO
 Namespace SRALE.Models
     ''' <summary>
-    ''' Cria a classe CPR
+    ''' Cria as propriedades privadas de Coordenações.
     ''' </summary>
+    <Serializable>
     Public Class clsCoord
         Implements IComparer(Of clsCoord)
-        'Cria as propriendade privadas de CPR
         Private Property _ElementID As Guid
         Private Property _Nome As String
-        Private Property _ListaEta As List(Of clsETAs)
-        'Cria as propriedades públicas de CPR
+        Private Property _lstEta As List(Of clsETAs)
         Public Property ElementID As Guid
             Get
                 Return _ElementID
@@ -29,60 +28,36 @@ Namespace SRALE.Models
                 _Nome = value
             End Set
         End Property
-        Public Property ListaEta As List(Of clsETAs)
+        Public Property lstEta As List(Of clsETAs)
             Get
-                Return _ListaEta
+                Return _lstEta
             End Get
             Set(value As List(Of clsETAs))
-                _ListaEta = value
+                _lstEta = value
             End Set
         End Property
         ''' <summary>
-        ''' Cria uma metódo new
+        ''' Cria um amétodo new
         ''' </summary>
         Public Sub New()
 
         End Sub
         ''' <summary>
-        ''' Cria um método new implementado para carregar a classe
+        ''' Cria uma método new implementado para carregar a classe.
         ''' </summary>
+        ''' <param name="ElemnentId"></param>
         ''' <param name="Nome"></param>
-        ''' <param name="ElementID"></param>
-        Public Sub New(ByVal ElementID As Guid, ByVal Nome As String, ByVal ListaEtas As List(Of clsETAs))
+        ''' <param name="lsEta"></param>
+        Public Sub New(ByVal ElemnentId As Guid, ByVal Nome As String, ByVal lsEta As List(Of clsETAs))
             Me.ElementID = ElementID
             Me.Nome = Nome
-            Me.ListaEta = ListaEta
+            Me.lstEta = lsEta
         End Sub
-        ''' <summary>
-        ''' Permite a ordenação do objeto
-        ''' </summary>
-        ''' <param name="x"></param>
-        ''' <param name="y"></param>
-        ''' <returns></returns>
-        Public Function Compare(ByVal x As clsCoord, ByVal y As clsCoord) As Integer Implements IComparer(Of clsCoord).Compare
+
+        Public Function Compare(x As clsCoord, y As clsCoord) As Integer Implements IComparer(Of clsCoord).Compare
             Return String.Compare(x.Nome, y.Nome)
         End Function
-        ''' <summary>
-        ''' Função que busca as Coordenações no AF
-        ''' </summary>
-        ''' <returns></returns>
-        Public Function buscaAF() As List(Of clsCoord)
-            Dim myPISystems As New PISystems
-            Dim myCom As PISystem = myPISystems.DefaultPISystem
-            Dim myDB As AFDatabase = myCom.Databases(My.Settings.myAFdb)
-            Dim listaCPR As AFElements
-            'My.Settings.myAFRootID > ElementID do \PORTAL COOPERAÇÃO\RELATÓRIO DE QUALIDADE DA ÁGUA\
-            Dim myPathRootID As Guid = My.Settings.myAFRootID
-            listaCPR = AFElement.FindElement(myCom, myPathRootID).Elements
-            Dim CPR As New clsCoord()
-            Dim retorno As New List(Of clsCoord)
-            Dim ETA As New clsETAs
-            For Each item As AFElement In listaCPR
-                CPR = New clsCoord(item.ID, item.Name, ETA.buscaETAAF(item.ID))
-                retorno.Add(CPR)
-            Next
-            Return retorno
-        End Function
+
         ''' <summary>
         ''' Função que busca as Coordenações no SQL
         ''' </summary>

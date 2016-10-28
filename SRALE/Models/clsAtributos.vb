@@ -9,7 +9,6 @@ Namespace SRALE.Models
     Public Class clsAtributos
         Implements IComparer(Of clsAtributos)
         Private Property _AtributoID As Guid
-        Private Property _EtAID As Guid
         Private Property _AtributoNome As String
         Private Property _Grupo As String
         Private Property _Categoria As String
@@ -26,14 +25,6 @@ Namespace SRALE.Models
             End Get
             Set(value As Guid)
                 _AtributoID = value
-            End Set
-        End Property
-        Public Property EtaID As Guid
-            Get
-                Return _EtAID
-            End Get
-            Set(value As Guid)
-                _EtAID = value
             End Set
         End Property
         Public Property AtributoNome As String

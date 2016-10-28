@@ -10,10 +10,22 @@
       <Value Profile="(Default)">"Integrated Security=SSPI;Initial Catalog=SRALE;Data Source=.\DB;"</Value>
     </Setting>
     <Setting Name="myAFRootID" Type="System.Guid" Scope="Application">
-      <Value Profile="(Default)">6aef0129-c77d-4828-98cc-3f80e059183e</Value>
+      <Value Profile="(Default)">d4763b58-3566-4443-849f-e8cb49ff8096</Value>
     </Setting>
     <Setting Name="myAFdb" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">"Compesa"</Value>
+      <Value Profile="(Default)">"COMPESA NOVO"</Value>
+    </Setting>
+    <Setting Name="myAFEtaTempID" Type="System.Guid" Scope="Application">
+      <Value Profile="(Default)">cf0e452d-636b-4194-9d32-31ebb3b45a58</Value>
+    </Setting>
+    <Setting Name="myAFCategoriaID" Type="System.Guid" Scope="Application">
+      <Value Profile="(Default)">7d88482d-5ab5-498a-9e88-53321fd4a2fe</Value>
+    </Setting>
+    <Setting Name="myAFGerRootID" Type="System.Guid" Scope="Application">
+      <Value Profile="(Default)">37f1ea6a-84d0-11e6-a49e-346895df285c</Value>
+    </Setting>
+    <Setting Name="myAFCoordTempID" Type="System.Guid" Scope="Application">
+      <Value Profile="(Default)">005322b9-a0e2-471e-a955-83bd9e3a0205</Value>
     </Setting>
   </Settings>
 </SettingsFile>

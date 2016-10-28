@@ -177,6 +177,7 @@
     <Compile Include="Models\clsAtributos.vb" />
     <Compile Include="Models\clsCoord.vb" />
     <Compile Include="Models\clsCoordDdlViewModel.vb" />
+    <Compile Include="Models\clsElementos.vb" />
     <Compile Include="Models\clsETAs.vb" />
     <Compile Include="Models\clsEtasDdlViewModel.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
