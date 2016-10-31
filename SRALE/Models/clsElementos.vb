@@ -40,7 +40,7 @@ Namespace SRALE.Models
         ''' e Etas
         ''' </summary>
         ''' <returns></returns>
-        Public Shared Function buscaEtaAF() As List(Of clsCoord)
+        Public Function buscaEtaAF() As List(Of clsCoord)
             Dim lista As New List(Of clsCoord)
             Dim myPISystems As New PISystems
             Dim myCom As PISystem = myPISystems.DefaultPISystem

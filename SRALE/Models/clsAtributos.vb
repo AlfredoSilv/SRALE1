@@ -93,10 +93,9 @@ Namespace SRALE.Models
         ''' <param name="Data"></param>
         ''' <param name="Valor"></param>
         ''' <param name="AtributoUOM"></param>
-        Public Sub New(ByVal AtributoID As Guid, ByVal EtaID As Guid, ByVal AtributeNome As String, ByVal Categoria As String, ByVal Data As DateTime,
+        Public Sub New(ByVal AtributoID As Guid, ByVal AtributeNome As String, ByVal Categoria As String, ByVal Data As DateTime,
                        ByVal Valor As Double, ByVal AtributoUOM As String)
             Me.AtributoID = AtributoID
-            Me.EtaID = EtaID
             Me.AtributoNome = AtributoNome
             Me.Categoria = Categoria
             Me.Data = Data
@@ -171,7 +170,7 @@ Namespace SRALE.Models
                     If Not item.GetValue.UOM = Nothing Then
                         valor = item.GetValues(tr, 24, item.DefaultUOM)
                         For Each val As AFValue In valor
-                            lstAtributos.Add(New clsAtributos(item.ID, item.Parent.ID, item.Name, item.CategoriesString.ToString, val.Timestamp.LocalTime, val.Value, item.DefaultUOM.Abbreviation))
+                            lstAtributos.Add(New clsAtributos(item.ID, item.Name, item.CategoriesString, val.Timestamp.LocalTime, val.Value, item.DefaultUOM.Abbreviation))
                         Next
                     End If
                 End If
