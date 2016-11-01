@@ -58,51 +58,51 @@ Namespace SRALE.Models
             Return String.Compare(x.Nome, y.Nome)
         End Function
 
-        ''' <summary>
-        ''' Função que busca as Coordenações no SQL
-        ''' </summary>
-        ''' <returns></returns>
-        Public Shared Function buscarCPRSQL() As List(Of clsCoord)
-            Dim conexao As New clsConexao(My.Settings.strCon)
-            Dim sql As New StringBuilder
-            sql.Append("SELECT cpr_ElementID, cpr_Nome FROM SRALE.dbo.tb_Coordenacao ORDER BY cpr_Nome")
-            Dim dataReader As SqlDataReader = conexao.retornaDataReader(sql.ToString)
-            Dim retorno As New List(Of clsCoord)
-            Try
-                If dataReader.HasRows Then
-                    While dataReader.Read()
-                        Dim CPR As New clsCoord()
-                        CPR.ElementID = Guid.Parse(dataReader("cpr_ElementID").ToString)
-                        CPR.Nome = dataReader("cpr_Nome").ToString
-                        retorno.Add(CPR)
-                    End While
-                End If
+        '''' <summary>
+        '''' Função que busca as Coordenações no SQL
+        '''' </summary>
+        '''' <returns></returns>
+        'Public Shared Function buscarCPRSQL() As List(Of clsCoord)
+        '    Dim conexao As New clsConexao(My.Settings.strCon)
+        '    Dim sql As New StringBuilder
+        '    sql.Append("SELECT cpr_ElementID, cpr_Nome FROM SRALE.dbo.tb_Coordenacao ORDER BY cpr_Nome")
+        '    Dim dataReader As SqlDataReader = conexao.retornaDataReader(sql.ToString)
+        '    Dim retorno As New List(Of clsCoord)
+        '    Try
+        '        If dataReader.HasRows Then
+        '            While dataReader.Read()
+        '                Dim CPR As New clsCoord()
+        '                CPR.ElementID = Guid.Parse(dataReader("cpr_ElementID").ToString)
+        '                CPR.Nome = dataReader("cpr_Nome").ToString
+        '                retorno.Add(CPR)
+        '            End While
+        '        End If
 
-                Return retorno
-            Finally
-            End Try
-        End Function
-        ''' <summary>
-        ''' Método de inserção de Coordenada na base Sql
-        ''' </summary>
-        ''' <param name="ElementId"></param>
-        ''' <param name="ElementName"></param>
-        ''' <param name="cmdParam"></param>
-        Public Sub insCoordSql(ByVal ElementId As Guid, ByVal ElementName As String, ByVal ParamArray cmdParam() As SqlParameter)
-            Dim conexao As New clsConexao(My.Settings.strCon)
-            Dim sql As New StringBuilder
-            cmdParam(0).Value = ElementId.ToString
-            cmdParam(1).Value = ElementName.ToString
-            sql.Append("INSERT INTO [dbo].[tb_Coordenacao] ")
-            sql.Append("([cpr_ElementID] ")
-            sql.Append(",[cpr_Nome]) ")
-            sql.Append("VALUES ")
-            sql.Append("(@cpr_ElementID, @ElementName)")
-            Try
-                conexao.insertDados(sql.ToString, cmdParam)
-            Catch ex As SqlException
-            Finally
-            End Try
-        End Sub
+        '        Return retorno
+        '    Finally
+        '    End Try
+        'End Function
+        '''' <summary>
+        '''' Método de inserção de Coordenada na base Sql
+        '''' </summary>
+        '''' <param name="ElementId"></param>
+        '''' <param name="ElementName"></param>
+        '''' <param name="cmdParam"></param>
+        'Public Sub insCoordSql(ByVal ElementId As Guid, ByVal ElementName As String, ByVal ParamArray cmdParam() As SqlParameter)
+        '    Dim conexao As New clsConexao(My.Settings.strCon)
+        '    Dim sql As New StringBuilder
+        '    cmdParam(0).Value = ElementId.ToString
+        '    cmdParam(1).Value = ElementName.ToString
+        '    sql.Append("INSERT INTO [dbo].[tb_Coordenacao] ")
+        '    sql.Append("([cpr_ElementID] ")
+        '    sql.Append(",[cpr_Nome]) ")
+        '    sql.Append("VALUES ")
+        '    sql.Append("(@cpr_ElementID, @ElementName)")
+        '    Try
+        '        conexao.insertDados(sql.ToString, cmdParam)
+        '    Catch ex As SqlException
+        '    Finally
+        '    End Try
+        'End Sub
     End Class
 End Namespace

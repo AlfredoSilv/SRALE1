@@ -14,7 +14,7 @@ Namespace SRALE.Models
                 Return _CoordAF
             End Get
             Set(value As List(Of clsCoord))
-                Dim lista As List(Of clsCoord) = buscaEtaAF()
+                Dim lista As List(Of clsCoord) = buscaCoordAF()
                 For Each coord As clsCoord In lista
                     value.Add(coord)
                 Next
@@ -26,7 +26,7 @@ Namespace SRALE.Models
                 Return _EtaAF
             End Get
             Set(value As List(Of clsETAs))
-                Dim lista As List(Of clsCoord) = buscaEtaAF()
+                Dim lista As List(Of clsCoord) = buscaCoordAF()
                 For Each coord As clsCoord In lista
                     For Each eta As clsETAs In coord.lstEta
                         value.Add(eta)
@@ -40,7 +40,7 @@ Namespace SRALE.Models
         ''' e Etas
         ''' </summary>
         ''' <returns></returns>
-        Public Function buscaEtaAF() As List(Of clsCoord)
+        Public Function buscaCoordAF() As List(Of clsCoord)
             Dim lista As New List(Of clsCoord)
             Dim myPISystems As New PISystems
             Dim myCom As PISystem = myPISystems.DefaultPISystem
@@ -114,6 +114,44 @@ Namespace SRALE.Models
                 lista.Add(par.Value)
             Next
             Return lista
+        End Function
+        Public Function buscaAtibAF(ByVal IDRoot As Guid, ByVal dtIni As String, ByVal dtFin As String) As List(Of clsAtributos)
+            If dtIni.ToString = "" Then
+                dtIni = Today.AddMinutes(30).ToString("dd/MM/yyyy HH:mm:ss")
+            Else
+                dtIni += " 00:30:00"
+            End If
+            If dtFin.ToString = "" Then
+                dtFin = Today.AddHours(23).ToString("dd/MM/yyyy HH:mm:ss")
+            Else
+                dtFin += "23:00:00"
+            End If
+            Dim myPathRootID As Guid = IDRoot
+            Dim myPISystems As New PISystems
+            Dim myCom As PISystem = myPISystems.DefaultPISystem
+            Dim myDB As AFDatabase = myCom.Databases(My.Settings.myAFdb)
+            Dim atributos As AFAttributes
+            Dim valor As AFValues
+            Dim st As AFTime = New AFTime(dtIni.ToString)
+            Dim et As AFTime = New AFTime(dtFin.ToString)
+            Dim tr As AFTimeRange = New AFTimeRange(st, et)
+            Dim lstAtributos As New List(Of clsAtributos)
+            Dim lstAtribSort As New List(Of clsAtributos)
+            'A variável attributes, do tipo AFAttributes, recebe os atributos 
+            atributos = AFElement.FindElement(myCom, myPathRootID).Attributes
+            For Each item As AFAttribute In atributos
+                If item.GetValue.IsGood Then
+                    If Not item.GetValue.UOM = Nothing Then
+                        valor = item.GetValues(tr, 24, item.DefaultUOM)
+                        For Each val As AFValue In valor
+                            lstAtributos.Add(New clsAtributos(item.ID, item.Name, val.Timestamp.LocalTime, val.Value, val.UOM.Abbreviation))
+                        Next
+                    End If
+                End If
+            Next
+            lstAtribSort = lstAtributos
+            lstAtribSort.Sort(Function(p1 As clsAtributos, p2 As clsAtributos) p1.AtribData.CompareTo(p2.AtribData))
+            Return lstAtribSort
         End Function
     End Class
 End Namespace

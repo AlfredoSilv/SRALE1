@@ -4,29 +4,24 @@ Namespace SRALE.Controller
         Inherits System.Web.Mvc.Controller
         Public Function Index() As ActionResult
             ViewData("Message") = "SRALE - Sistema de Registro de Análises Laboratoriais em ETA"
+            ViewBag.ElementID = New SelectList(New clsCoordDdlViewModel().ListCoord(), "ElementID", "Nome")
 
-            'Return RedirectToAction("Index", "Home")
+            Return View()
+        End Function
+        <HttpPost>
+        Public Function Index(elementId As Guid) As ActionResult
+            ' O quarto parametro "clienteId" diz qual é o ID
+            ' que deve vir pré-selecionado ao montar o DropDownList
+            ViewBag.ElementID = New SelectList(New clsCoordDdlViewModel().ListCoord(), "ElementID", "Nome", elementId)
+
             Return View()
         End Function
 
         <HttpGet>
         Public Function Inicio() As PartialViewResult
             ViewData("Message") = "SRALE - Sistema de Registro de Análises Laboratoriais em ETA"
-            Dim model As New clsCoordDdlViewModel
-            Dim coord As New clsElementos
-            Dim lstCoord As New List(Of clsCoord)
-            lstCoord = coord.buscaEtaAF
-            For Each item As clsCoord In lstCoord
-                With model
-                    .Items =
-                        {
-                            New SelectListItem With {.Value = item.ElementID.ToString, .Text = item.Nome}
-                        }
-                End With
-            Next
 
-            'model.ListCoord = lstCoord
-            Return PartialView(model)
+            Return PartialView()
         End Function
 
         Function About() As ActionResult

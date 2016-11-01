@@ -1,0 +1,24 @@
+.left {float:left;}
+.right {float:right;}
+.clear {clear:both;}
+	
+	
+/* multiselect styles */
+.multiselect {
+    width: 600px;
+	height: 200px !important;
+    margin: auto;
+}
+
+.ui-multiselect 
+{
+    width: 600px;
+	height: 200px;
+    margin: auto;
+}
+
+#switcher {
+	margin-top: 20px;
+}
+
+form {margin: 0; padding: 0;}

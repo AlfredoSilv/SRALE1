@@ -17,7 +17,7 @@ Namespace SRALE.Negocio
         End Function
         Private Function buscaAtrib(ByVal ID As Guid, ByVal dtIni As String, ByVal dtFin As String) As List(Of clsAtributos) Implements INegocio.buscaAtribAF
             Dim lstAtrib As List(Of clsAtributos)
-            Dim Atrib As New clsAtributos
+            Dim Atrib As New clsElementos
             lstAtrib = Atrib.buscaAtibAF(ID, dtIni, dtFin)
             Return lstAtrib
         End Function
